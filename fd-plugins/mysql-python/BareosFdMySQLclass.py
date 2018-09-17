@@ -29,7 +29,7 @@ import os
 from subprocess import *
 from  BareosFdPluginBaseclass import *
 import BareosFdWrapper
-
+import re
 
 class BareosFdMySQLclass (BareosFdPluginBaseclass):
     '''
@@ -108,7 +108,8 @@ class BareosFdMySQLclass (BareosFdPluginBaseclass):
             DebugMessage(context, 100, "databases in ignore list: %s\n" %(self.options['ignore_db'].split(',')));
             for ignored_cur in self.options['ignore_db'].split(','):
                 try:
-                    self.databases.remove(ignored_cur)
+                    tmp_list = [x for x in self.databases if not re.search(ignored_cur, x)]
+                    self.databases = tmp_list
                 except:
                     pass
         DebugMessage(context, 100, "databases to backup: %s\n" %(self.databases));
